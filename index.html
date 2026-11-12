@@ -1,11 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="theme-color" content="#10172a">
+    <title>SKYLINE RUN - 横スクロールアクション</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="game.js" defer></script>
 </head>
 <body>
-    ようこそ私のページへ！
+    <main class="game-shell">
+        <header class="game-header">
+            <a class="brand" href="#" aria-label="SKYLINE RUN ホーム">
+                <span class="brand-mark" aria-hidden="true">S</span>
+                <span>SKYLINE<span class="brand-accent">RUN</span></span>
+            </a>
+            <p class="header-note">走って、跳んで、街の向こうへ。</p>
+        </header>
+
+        <section class="game-card" aria-label="ゲーム画面">
+            <div class="game-toolbar">
+                <div class="level-label"><span class="status-dot"></span> STAGE 01 <span class="level-divider">/</span> CITY DASH</div>
+                <div class="score" aria-live="polite">
+                    <span class="coin-icon" aria-hidden="true">●</span>
+                    <span id="coin-count">0</span><span class="score-total">/ 8</span>
+                </div>
+            </div>
+
+            <div class="canvas-wrap">
+                <canvas id="game-canvas" width="960" height="540" aria-label="横スクロールアクションゲーム">
+                    このゲームを遊ぶには、canvasに対応したブラウザーが必要です。
+                </canvas>
+                <div class="game-overlay" id="game-overlay">
+                    <div class="overlay-card">
+                        <p class="eyebrow" id="overlay-eyebrow">READY, RUNNER?</p>
+                        <h1 id="overlay-title">街を駆け抜けよう。</h1>
+                        <p class="overlay-copy" id="overlay-copy">コインを集めながら、足場をジャンプで渡ってゴールを目指そう。</p>
+                        <button class="start-button" id="start-button" type="button">ゲームスタート <span aria-hidden="true">→</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-footer">
+                <p class="controls-hint"><kbd>←</kbd><kbd>→</kbd> 移動 <span class="hint-separator">·</span> <kbd>Space</kbd> ジャンプ</p>
+                <p class="progress-label" id="progress-label">ゴールまで <span>—</span></p>
+            </div>
+        </section>
+
+        <nav class="touch-controls" aria-label="タッチ操作">
+            <div class="direction-controls">
+                <button class="control-button" type="button" data-control="left" aria-label="左へ移動">←</button>
+                <button class="control-button" type="button" data-control="right" aria-label="右へ移動">→</button>
+            </div>
+            <button class="control-button jump-button" type="button" data-control="jump">JUMP</button>
+        </nav>
+
+        <p class="page-note">穴に落ちても大丈夫。スタート地点から何度でも挑戦できます。</p>
+    </main>
 </body>
 </html>

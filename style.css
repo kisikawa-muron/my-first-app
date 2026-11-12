@@ -1,0 +1,359 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap');
+
+:root {
+    color-scheme: dark;
+    font-family: "DM Sans", "Noto Sans JP", sans-serif;
+    color: #f4f6ff;
+    background: #10172a;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    --muted: #8d98b2;
+    --mint: #78f0c2;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    background:
+        radial-gradient(ellipse at 50% 7%, rgba(42, 63, 107, 0.3), transparent 50%),
+        #10172a;
+}
+
+button {
+    font: inherit;
+}
+
+.game-shell {
+    width: min(100% - 40px, 1040px);
+    margin: 0 auto;
+    padding: 34px 0 24px;
+}
+
+.game-header,
+.game-toolbar,
+.game-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.game-header {
+    margin-bottom: 22px;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    color: #f4f6ff;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-decoration: none;
+}
+
+.brand-mark {
+    display: grid;
+    width: 31px;
+    height: 31px;
+    place-items: center;
+    border: 1px solid rgba(120, 240, 194, 0.55);
+    border-radius: 9px;
+    color: var(--mint);
+    font-size: 17px;
+    letter-spacing: 0;
+    transform: rotate(-5deg);
+}
+
+.brand-accent {
+    color: var(--mint);
+}
+
+.header-note,
+.page-note {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.game-card {
+    overflow: hidden;
+    border: 1px solid rgba(153, 170, 212, 0.17);
+    border-radius: 16px;
+    background: #171f35;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+}
+
+.game-toolbar {
+    height: 54px;
+    padding: 0 22px;
+}
+
+.level-label,
+.score {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+}
+
+.level-label {
+    color: #c8d0e4;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--mint);
+    box-shadow: 0 0 12px rgba(120, 240, 194, 0.65);
+}
+
+.level-divider,
+.score-total {
+    color: #74809c;
+}
+
+.score {
+    gap: 7px;
+    color: #fff;
+    font-size: 13px;
+}
+
+.coin-icon {
+    color: #ffd76f;
+    font-size: 12px;
+    text-shadow: 0 0 8px rgba(255, 215, 111, 0.45);
+}
+
+.canvas-wrap {
+    position: relative;
+    overflow: hidden;
+    background: #17213a;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+}
+
+.game-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: linear-gradient(90deg, rgba(12, 18, 35, 0.76), rgba(12, 18, 35, 0.2));
+    transition: opacity 180ms ease, visibility 180ms ease;
+}
+
+.game-overlay.is-hidden {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.overlay-card {
+    width: min(100%, 440px);
+    text-align: center;
+}
+
+.eyebrow {
+    margin: 0 0 12px;
+    color: var(--mint);
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+}
+
+.overlay-card h1 {
+    margin: 0;
+    font-size: clamp(25px, 4vw, 39px);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+}
+
+.overlay-copy {
+    margin: 13px auto 22px;
+    color: #c0c9df;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.start-button {
+    min-height: 46px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--mint);
+    color: #10251f;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 800;
+    transition: transform 150ms ease, background 150ms ease;
+}
+
+.start-button:hover {
+    background: #9af6d2;
+    transform: translateY(-2px);
+}
+
+.start-button span {
+    padding-left: 9px;
+}
+
+.game-footer {
+    min-height: 52px;
+    padding: 0 22px;
+}
+
+.controls-hint,
+.progress-label {
+    margin: 0;
+    color: #9da8c1;
+    font-size: 11px;
+}
+
+kbd {
+    display: inline-grid;
+    min-width: 22px;
+    height: 21px;
+    margin-right: 3px;
+    padding: 0 5px;
+    place-items: center;
+    border: 1px solid #3c4761;
+    border-radius: 5px;
+    background: #232d46;
+    color: #e5e9f4;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+}
+
+.hint-separator {
+    padding: 0 6px;
+    color: #65718d;
+}
+
+.progress-label span {
+    color: #e7ecfa;
+    font-family: "DM Mono", monospace;
+}
+
+.touch-controls {
+    display: none;
+    justify-content: space-between;
+    margin-top: 16px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.direction-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.control-button {
+    width: 58px;
+    height: 52px;
+    border: 1px solid rgba(153, 170, 212, 0.24);
+    border-radius: 12px;
+    background: #1b2540;
+    color: #f4f6ff;
+    cursor: pointer;
+    font-size: 21px;
+    font-weight: 700;
+    touch-action: none;
+}
+
+.control-button:active,
+.control-button.is-pressed {
+    border-color: rgba(120, 240, 194, 0.7);
+    background: #263d4a;
+}
+
+.jump-button {
+    width: 86px;
+    color: var(--mint);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+}
+
+.page-note {
+    margin-top: 17px;
+    text-align: center;
+}
+
+@media (pointer: coarse), (max-width: 700px) {
+    .touch-controls {
+        display: flex;
+    }
+
+    .game-shell {
+        width: min(100% - 24px, 1040px);
+        padding-top: 20px;
+    }
+
+    .header-note {
+        font-size: 10px;
+    }
+
+    .game-toolbar {
+        height: 46px;
+        padding: 0 14px;
+    }
+
+    .level-label {
+        font-size: 9px;
+    }
+
+    .game-footer {
+        min-height: 45px;
+        padding: 0 14px;
+    }
+
+    .controls-hint,
+    .progress-label {
+        font-size: 10px;
+    }
+
+    .game-overlay {
+        padding: 15px;
+    }
+
+    .overlay-copy {
+        margin: 8px auto 13px;
+        font-size: 11px;
+    }
+
+    .start-button {
+        min-height: 40px;
+        padding: 0 16px;
+        font-size: 11px;
+    }
+
+    .page-note {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 420px) {
+    .header-note {
+        max-width: 120px;
+        text-align: right;
+    }
+
+    .controls-hint kbd:nth-of-type(3),
+    .hint-separator {
+        display: none;
+    }
+}
