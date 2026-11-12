@@ -6,12 +6,13 @@ const overlayEyebrow = document.querySelector("#overlay-eyebrow");
 const overlayTitle = document.querySelector("#overlay-title");
 const overlayCopy = document.querySelector("#overlay-copy");
 const coinCount = document.querySelector("#coin-count");
+const coinTotal = document.querySelector("#coin-total");
 const progressLabel = document.querySelector("#progress-label");
 
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
-const WORLD_WIDTH = 3200;
-const GOAL_X = 3020;
+const WORLD_WIDTH = 5400;
+const GOAL_X = 5150;
 const GRAVITY = 1750;
 const MOVE_SPEED = 285;
 const JUMP_SPEED = 670;
@@ -20,11 +21,17 @@ const platforms = [
     { x: 0, y: 460, width: 680, height: 80 },
     { x: 790, y: 460, width: 580, height: 80 },
     { x: 1490, y: 460, width: 600, height: 80 },
-    { x: 2210, y: 460, width: 890, height: 80 },
+    { x: 2210, y: 460, width: 590, height: 80 },
+    { x: 2920, y: 460, width: 590, height: 80 },
+    { x: 3630, y: 460, width: 590, height: 80 },
+    { x: 4340, y: 460, width: 1060, height: 80 },
     { x: 430, y: 375, width: 150, height: 18 },
     { x: 920, y: 355, width: 150, height: 18 },
     { x: 1630, y: 375, width: 170, height: 18 },
     { x: 2440, y: 355, width: 170, height: 18 },
+    { x: 3150, y: 375, width: 170, height: 18 },
+    { x: 3860, y: 355, width: 170, height: 18 },
+    { x: 4570, y: 375, width: 180, height: 18 },
 ];
 
 const coins = [
@@ -36,13 +43,23 @@ const coins = [
     { x: 1710, y: 330 },
     { x: 1980, y: 410 },
     { x: 2525, y: 310 },
+    { x: 3070, y: 415 },
+    { x: 3235, y: 330 },
+    { x: 3470, y: 410 },
+    { x: 3945, y: 310 },
+    { x: 4140, y: 410 },
+    { x: 4650, y: 330 },
+    { x: 4920, y: 410 },
 ];
 
 const enemies = [
     { spawnX: 335, x: 335, minX: 190, maxX: 570, y: 420, width: 36, height: 40, speed: 82, direction: 1, defeated: false },
     { spawnX: 1050, x: 1050, minX: 850, maxX: 1260, y: 420, width: 36, height: 40, speed: 96, direction: -1, defeated: false },
     { spawnX: 1810, x: 1810, minX: 1550, maxX: 2010, y: 420, width: 36, height: 40, speed: 88, direction: 1, defeated: false },
-    { spawnX: 2690, x: 2690, minX: 2300, maxX: 2880, y: 420, width: 36, height: 40, speed: 104, direction: -1, defeated: false },
+    { spawnX: 2530, x: 2530, minX: 2300, maxX: 2760, y: 420, width: 36, height: 40, speed: 104, direction: -1, defeated: false },
+    { spawnX: 3260, x: 3260, minX: 3000, maxX: 3470, y: 420, width: 36, height: 40, speed: 92, direction: 1, defeated: false },
+    { spawnX: 3900, x: 3900, minX: 3700, maxX: 4170, y: 420, width: 36, height: 40, speed: 100, direction: -1, defeated: false },
+    { spawnX: 4740, x: 4740, minX: 4420, maxX: 5090, y: 420, width: 36, height: 40, speed: 108, direction: 1, defeated: false },
 ];
 
 const player = {
@@ -94,6 +111,7 @@ function startGame() {
 
 function updateCoinCount() {
     coinCount.textContent = String(collectedCoins);
+    coinTotal.textContent = String(coins.length);
 }
 
 function setOverlay(eyebrow, title, copy, buttonText) {
