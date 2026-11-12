@@ -38,6 +38,13 @@ const coins = [
     { x: 2525, y: 310 },
 ];
 
+const enemies = [
+    { spawnX: 335, x: 335, minX: 190, maxX: 570, y: 420, width: 36, height: 40, speed: 82, direction: 1, defeated: false },
+    { spawnX: 1050, x: 1050, minX: 850, maxX: 1260, y: 420, width: 36, height: 40, speed: 96, direction: -1, defeated: false },
+    { spawnX: 1810, x: 1810, minX: 1550, maxX: 2010, y: 420, width: 36, height: 40, speed: 88, direction: 1, defeated: false },
+    { spawnX: 2690, x: 2690, minX: 2300, maxX: 2880, y: 420, width: 36, height: 40, speed: 104, direction: -1, defeated: false },
+];
+
 const player = {
     x: 72,
     y: 360,
@@ -58,6 +65,7 @@ let state = "ready";
 let cameraX = 0;
 let elapsed = 0;
 let noticeTimer = 0;
+let noticeText = "もう一度ジャンプ！";
 let collectedCoins = 0;
 let previousTime = 0;
 
@@ -72,6 +80,11 @@ function startGame() {
         player.velocityY = 0;
         player.grounded = false;
         cameraX = 0;
+        enemies.forEach((enemy) => {
+            enemy.x = enemy.spawnX;
+            enemy.direction = 1;
+            enemy.defeated = false;
+        });
         updateCoinCount();
     }
 
@@ -158,6 +171,15 @@ function update(delta) {
     elapsed += delta;
     noticeTimer = Math.max(0, noticeTimer - delta);
 
+    enemies.forEach((enemy) => {
+        if (enemy.defeated) return;
+        enemy.x += enemy.speed * enemy.direction * delta;
+        if (enemy.x <= enemy.minX || enemy.x + enemy.width >= enemy.maxX) {
+            enemy.x = Math.max(enemy.minX, Math.min(enemy.maxX - enemy.width, enemy.x));
+            enemy.direction *= -1;
+        }
+    });
+
     const direction = Number(input.right) - Number(input.left);
     player.x += direction * MOVE_SPEED * delta;
     player.x = Math.max(0, Math.min(WORLD_WIDTH - player.width, player.x));
@@ -174,8 +196,25 @@ function update(delta) {
     player.y += player.velocityY * delta;
     player.grounded = false;
 
+    const nextBottom = player.y + player.height;
+    let stompedEnemy = false;
+    if (player.velocityY > 0) {
+        for (const enemy of enemies) {
+            const overlaps = !enemy.defeated
+                && player.x + player.width > enemy.x
+                && player.x < enemy.x + enemy.width;
+            const landsOnEnemy = previousBottom <= enemy.y + 10 && nextBottom >= enemy.y;
+            if (overlaps && landsOnEnemy) {
+                enemy.defeated = true;
+                player.y = enemy.y - player.height;
+                player.velocityY = -JUMP_SPEED * 0.48;
+                stompedEnemy = true;
+                break;
+            }
+        }
+    }
+
     if (player.velocityY >= 0) {
-        const nextBottom = player.y + player.height;
         for (const platform of platforms) {
             const overlaps = player.x + player.width > platform.x
                 && player.x < platform.x + platform.width;
@@ -183,6 +222,20 @@ function update(delta) {
                 player.y = platform.y - player.height;
                 player.velocityY = 0;
                 player.grounded = true;
+                break;
+            }
+        }
+    }
+
+    if (!stompedEnemy) {
+        for (const enemy of enemies) {
+            const overlaps = !enemy.defeated
+                && player.x + player.width > enemy.x
+                && player.x < enemy.x + enemy.width
+                && player.y + player.height > enemy.y + 6
+                && player.y < enemy.y + enemy.height;
+            if (overlaps) {
+                respawnPlayer("敵にぶつかった！");
                 break;
             }
         }
@@ -200,12 +253,7 @@ function update(delta) {
     }
 
     if (player.y > HEIGHT + 80) {
-        player.x = 72;
-        player.y = 360;
-        player.velocityY = 0;
-        player.grounded = false;
-        cameraX = 0;
-        noticeTimer = 1.4;
+        respawnPlayer("もう一度ジャンプ！");
     }
 
     if (player.x + player.width >= GOAL_X) {
@@ -220,6 +268,16 @@ function update(delta) {
 
     cameraX = Math.max(0, Math.min(WORLD_WIDTH - WIDTH, player.x - WIDTH * 0.36));
     progressLabel.innerHTML = `ゴールまで <span>${Math.max(0, Math.ceil(GOAL_X - player.x))}m</span>`;
+}
+
+function respawnPlayer(message) {
+    player.x = 72;
+    player.y = 360;
+    player.velocityY = 0;
+    player.grounded = false;
+    cameraX = 0;
+    noticeText = message;
+    noticeTimer = 1.4;
 }
 
 function drawBackground() {
@@ -353,6 +411,54 @@ function drawCoins() {
     }
 }
 
+function drawEnemies() {
+    for (const enemy of enemies) {
+        if (enemy.defeated) continue;
+        const x = enemy.x - cameraX;
+        if (x + enemy.width < -20 || x > WIDTH + 20) continue;
+        const bob = Math.sin(elapsed * 8 + enemy.spawnX) * 2;
+        const y = enemy.y + bob;
+
+        context.fillStyle = "rgba(4, 7, 23, 0.5)";
+        context.beginPath();
+        context.ellipse(x + enemy.width / 2, enemy.y + enemy.height + 4, 20, 5, 0, 0, Math.PI * 2);
+        context.fill();
+
+        context.save();
+        context.shadowColor = "#ff59ce";
+        context.shadowBlur = 13;
+        context.fillStyle = "#242143";
+        context.fillRect(x + 3, y + 8, enemy.width - 6, 27);
+        context.fillStyle = "#7b326f";
+        context.fillRect(x + 6, y + 12, enemy.width - 12, 18);
+        context.restore();
+
+        context.fillStyle = "#ff59ce";
+        context.fillRect(x + 8, y + 5, enemy.width - 16, 7);
+        context.fillStyle = "#121936";
+        context.fillRect(x + 9, y + 15, enemy.width - 18, 11);
+        context.fillStyle = "#ff557f";
+        context.shadowColor = "#ff335f";
+        context.shadowBlur = 8;
+        context.fillRect(x + (enemy.direction > 0 ? 13 : 21), y + 18, 5, 4);
+        context.fillRect(x + (enemy.direction > 0 ? 21 : 13), y + 18, 5, 4);
+        context.shadowBlur = 0;
+        context.fillStyle = "#54f5f2";
+        context.fillRect(x + 5, y + 32, enemy.width - 10, 3);
+
+        context.strokeStyle = "#ff59ce";
+        context.lineWidth = 2;
+        context.beginPath();
+        context.moveTo(x + enemy.width / 2, y + 5);
+        context.lineTo(x + enemy.width / 2, y - 2);
+        context.stroke();
+        context.fillStyle = "#54f5f2";
+        context.beginPath();
+        context.arc(x + enemy.width / 2, y - 3, 3, 0, Math.PI * 2);
+        context.fill();
+    }
+}
+
 function drawGoal() {
     const x = GOAL_X - cameraX;
     context.fillStyle = "rgba(84, 245, 242, 0.18)";
@@ -469,7 +575,7 @@ function drawNotice() {
     context.fillStyle = "#f4f6ff";
     context.font = "600 12px 'DM Sans', 'Noto Sans JP', sans-serif";
     context.textAlign = "center";
-    context.fillText("もう一度ジャンプ！", WIDTH / 2, 57);
+    context.fillText(noticeText, WIDTH / 2, 57);
     context.restore();
 }
 
@@ -478,6 +584,7 @@ function render() {
     drawBackground();
     drawPlatforms();
     drawCoins();
+    drawEnemies();
     drawGoal();
     drawPlayer();
     drawNotice();
