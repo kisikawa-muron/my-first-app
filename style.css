@@ -4,11 +4,12 @@
     color-scheme: dark;
     font-family: "DM Sans", "Noto Sans JP", sans-serif;
     color: #f4f6ff;
-    background: #10172a;
+    background: #080b1b;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
-    --muted: #8d98b2;
-    --mint: #78f0c2;
+    --muted: #9298ba;
+    --mint: #54f5f2;
+    --neon-pink: #ff59ce;
 }
 
 * {
@@ -20,8 +21,9 @@ body {
     min-height: 100vh;
     margin: 0;
     background:
-        radial-gradient(ellipse at 50% 7%, rgba(42, 63, 107, 0.3), transparent 50%),
-        #10172a;
+        radial-gradient(ellipse at 50% 0%, rgba(83, 47, 150, 0.28), transparent 48%),
+        radial-gradient(ellipse at 85% 55%, rgba(23, 97, 134, 0.12), transparent 42%),
+        #080b1b;
 }
 
 button {
@@ -71,7 +73,8 @@ button {
 }
 
 .brand-accent {
-    color: var(--mint);
+    color: var(--neon-pink);
+    text-shadow: 0 0 14px rgba(255, 89, 206, 0.45);
 }
 
 .header-note,
@@ -83,15 +86,16 @@ button {
 
 .game-card {
     overflow: hidden;
-    border: 1px solid rgba(153, 170, 212, 0.17);
+    border: 1px solid rgba(113, 141, 215, 0.23);
     border-radius: 16px;
-    background: #171f35;
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+    background: #11152b;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48), 0 0 36px rgba(79, 87, 190, 0.1);
 }
 
 .game-toolbar {
     height: 54px;
     padding: 0 22px;
+    border-bottom: 1px solid rgba(125, 146, 205, 0.12);
 }
 
 .level-label,
@@ -137,7 +141,21 @@ button {
 .canvas-wrap {
     position: relative;
     overflow: hidden;
-    background: #17213a;
+    background: #11152b;
+}
+
+.canvas-wrap::after {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 3px,
+        rgba(5, 8, 24, 0.1) 4px
+    );
+    content: "";
+    pointer-events: none;
 }
 
 canvas {
@@ -149,11 +167,14 @@ canvas {
 
 .game-overlay {
     position: absolute;
+    z-index: 2;
     inset: 0;
     display: grid;
     place-items: center;
     padding: 24px;
-    background: linear-gradient(90deg, rgba(12, 18, 35, 0.76), rgba(12, 18, 35, 0.2));
+    background:
+        radial-gradient(ellipse at 50% 48%, rgba(14, 17, 43, 0.55), rgba(8, 10, 28, 0.3) 68%),
+        linear-gradient(90deg, rgba(8, 10, 28, 0.56), rgba(8, 10, 28, 0.12));
     transition: opacity 180ms ease, visibility 180ms ease;
 }
 
@@ -165,6 +186,12 @@ canvas {
 
 .overlay-card {
     width: min(100%, 440px);
+    padding: 25px 22px;
+    border: 1px solid rgba(128, 164, 225, 0.22);
+    border-radius: 14px;
+    background: rgba(13, 16, 39, 0.69);
+    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.28), inset 0 0 30px rgba(88, 88, 177, 0.08);
+    backdrop-filter: blur(7px);
     text-align: center;
 }
 
@@ -181,6 +208,7 @@ canvas {
     font-size: clamp(25px, 4vw, 39px);
     font-weight: 800;
     letter-spacing: -0.05em;
+    text-shadow: 0 0 24px rgba(84, 245, 242, 0.23);
 }
 
 .overlay-copy {
@@ -195,8 +223,9 @@ canvas {
     padding: 0 22px;
     border: 0;
     border-radius: 8px;
-    background: var(--mint);
-    color: #10251f;
+    background: linear-gradient(110deg, #54f5f2, #9affdf);
+    box-shadow: 0 0 20px rgba(84, 245, 242, 0.2);
+    color: #081b27;
     cursor: pointer;
     font-size: 13px;
     font-weight: 800;
@@ -204,7 +233,8 @@ canvas {
 }
 
 .start-button:hover {
-    background: #9af6d2;
+    background: linear-gradient(110deg, #8affff, #b2ffe8);
+    box-shadow: 0 0 26px rgba(84, 245, 242, 0.38);
     transform: translateY(-2px);
 }
 
@@ -215,6 +245,7 @@ canvas {
 .game-footer {
     min-height: 52px;
     padding: 0 22px;
+    border-top: 1px solid rgba(125, 146, 205, 0.12);
 }
 
 .controls-hint,
@@ -265,9 +296,9 @@ kbd {
 .control-button {
     width: 58px;
     height: 52px;
-    border: 1px solid rgba(153, 170, 212, 0.24);
+    border: 1px solid rgba(100, 147, 203, 0.31);
     border-radius: 12px;
-    background: #1b2540;
+    background: linear-gradient(145deg, #1a2342, #11182f);
     color: #f4f6ff;
     cursor: pointer;
     font-size: 21px;
@@ -277,8 +308,9 @@ kbd {
 
 .control-button:active,
 .control-button.is-pressed {
-    border-color: rgba(120, 240, 194, 0.7);
-    background: #263d4a;
+    border-color: rgba(84, 245, 242, 0.8);
+    background: #173747;
+    box-shadow: 0 0 16px rgba(84, 245, 242, 0.18);
 }
 
 .jump-button {
